@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ফেরদৌস বেডিং স্টোর - দৈনিক, মাসিক ও বার্ষিক হিসাব</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght=400;500;600;700&display=swap');
+        body { font-family: 'Hind Siliguri', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen p-2 sm:p-4 md:p-6 lg:p-8 transition-colors duration-200">
+
+    <div class="w-full max-w-[1440px] mx-auto bg-white dark:bg-slate-900 rounded-2xl shadow-md overflow-hidden border border-slate-200/80 dark:border-slate-800">
+        
+        <div class="bg-slate-900 dark:bg-slate-950 p-6 md:p-8 text-white text-center shadow-sm relative border-b border-slate-800 dark:border-slate-900">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wide text-slate-100">ফেরদৌস বেডিং স্টোর</h1>
+            <p class="text-slate-400 mt-1.5 text-xs sm:text-sm md:text-base tracking-wider font-medium">দৈনিক, মাসিক ও বার্ষিক আর্থিক ট্র্যাকার</p>
+            
+            <button id="themeToggle" class="absolute top-6 right-4 sm:right-6 bg-slate-800 hover:bg-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800 p-2.5 rounded-xl text-base transition-colors cursor-pointer border border-slate-700/60 dark:border-slate-800" title="থিম পরিবর্তন করুন">
+                <span id="themeToggleIcon">🌙</span>
+            </button>
+        </div>
+
+        <div class="p-4 sm:p-6 md:p-8">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full lg:w-auto">
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <label class="font-bold text-slate-600 dark:text-slate-400 whitespace-nowrap text-xs md:text-sm uppercase tracking-wider">তারিখ:</label>
+                        <input type="date" id="appDate" class="w-full sm:w-auto border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm font-semibold focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <label class="font-bold text-teal-600 dark:text-teal-400 whitespace-nowrap text-xs md:text-sm uppercase tracking-wider">মাস/বছর ফিল্টার:</label>
+                        <input type="month" id="summaryMonth" class="w-full sm:w-auto border border-teal-200/60 dark:border-teal-900/60 rounded-xl p-2.5 text-xs md:text-sm font-bold focus:ring-2 focus:ring-teal-500 focus:outline-none bg-teal-50/50 dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-2 w-full lg:w-auto bg-slate-50 dark:bg-slate-950 p-2 rounded-xl border border-slate-200 dark:border-slate-800/60">
+                    <button onclick="exportData()" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs md:text-sm font-medium py-2 px-4 rounded-lg shadow-sm cursor-pointer transition-colors">
+                        📥 ব্যাকআপ ডাউনলোড
+                    </button>
+                    <label class="flex-1 sm:flex-none bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium py-2 px-4 rounded-lg shadow-sm cursor-pointer transition-colors text-center border border-slate-200 dark:border-slate-700">
+                        📤 ফাইল রিস্টোর
+                        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importData(event)">
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-8 p-4 md:p-6 bg-slate-50/60 dark:bg-slate-950/40 rounded-2xl border border-slate-200/60 dark:border-slate-900">
+                <h3 class="text-xs md:text-sm font-bold text-slate-700 dark:text-slate-400 mb-4 tracking-wider uppercase flex items-center gap-1.5">
+                    📊 মাসিক ও বার্ষিক হিসাবের সম্মিলিত প্রতিবেদন
+                </h3>
+                <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm md:text-base">
+                        <thead>
+                            <tr class="bg-slate-800 dark:bg-slate-800 text-slate-100 border-b border-slate-700 dark:border-slate-900">
+                                <th class="p-3 md:p-4 text-left font-semibold">হিসাবের খাত</th>
+                                <th class="p-3 md:p-4 text-right font-semibold w-1/3 md:w-1/4"><span id="monthlyLabel">চলতি মাস</span></th>
+                                <th class="p-3 md:p-4 text-right font-semibold w-1/3 md:w-1/4"><span id="yearlyLabel">চলতি বছর</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300 font-medium">
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-slate-600 dark:text-slate-400">💰 মোট বিক্রয়</td>
+                                <td class="p-3 md:p-4 text-right font-bold text-emerald-600 dark:text-emerald-400">৳<span id="mTotalSales">0</span></td>
+                                <td class="p-3 md:p-4 text-right font-bold text-emerald-600 dark:text-emerald-400">৳<span id="yTotalSales">0</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-slate-600 dark:text-slate-400">💸 মোট খরচ</td>
+                                <td class="p-3 md:p-4 text-right font-bold text-rose-600 dark:text-rose-400">৳<span id="mTotalExpenses">0</span></td>
+                                <td class="p-3 md:p-4 text-right font-bold text-rose-600 dark:text-rose-400">৳<span id="yTotalExpenses">0</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-slate-600 dark:text-slate-400">📅 ফিক্সড খরচ</td>
+                                <td class="p-3 md:p-4 text-right font-bold text-indigo-600 dark:text-indigo-400">৳<span id="mTotalMonthlyExpenses">0</span></td>
+                                <td class="p-3 md:p-4 text-right font-bold text-indigo-600 dark:text-indigo-400">৳<span id="yTotalMonthlyExpenses">0</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-slate-600 dark:text-slate-400">🏢 মোকাম বিল</td>
+                                <td class="p-3 md:p-4 text-right font-bold text-amber-600 dark:text-amber-400">৳<span id="mTotalMokam">0</span></td>
+                                <td class="p-3 md:p-4 text-right font-bold text-amber-600 dark:text-amber-400">৳<span id="yTotalMokam">0</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-slate-600 dark:text-slate-400">🌾 তুলা ক্রয়</td>
+                                <td class="p-3 md:p-4 text-right font-bold text-teal-600 dark:text-teal-400">৳<span id="mTotalTulaKroy">0</span></td>
+                                <td class="p-3 md:p-4 text-right font-bold text-teal-600 dark:text-teal-400">৳<span id="yTotalTulaKroy">0</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-slate-600 dark:text-slate-400">☁️ শিমুল তুলা</td>
+                                <td class="p-3 md:p-4 text-right font-bold text-sky-600 dark:text-sky-400">৳<span id="mTotalShimulTula">0</span></td>
+                                <td class="p-3 md:p-4 text-right font-bold text-sky-600 dark:text-sky-400">৳<span id="yTotalShimulTula">0</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-xs md:text-sm font-bold text-slate-500 dark:text-slate-400 mb-3 tracking-wider uppercase flex items-center gap-1.5">📌 আজকের দিনের হিসাব সারাংশ</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 w-full">
+                    <div class="bg-emerald-50/50 dark:bg-emerald-950/20 p-4 rounded-xl text-center border border-emerald-100 dark:border-emerald-900/40 shadow-sm">
+                        <p class="text-[11px] md:text-xs text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider">আজকের বিক্রয়</p>
+                        <p class="text-base md:text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-1">৳ <span id="totalSales">0</span></p>
+                    </div>
+                    <div class="bg-rose-50/50 dark:bg-rose-950/20 p-4 rounded-xl text-center border border-rose-100 dark:border-rose-900/40 shadow-sm">
+                        <p class="text-[11px] md:text-xs text-rose-700 dark:text-rose-400 font-bold uppercase tracking-wider">আজকের খরচ</p>
+                        <p class="text-base md:text-lg font-bold text-rose-600 dark:text-rose-400 mt-1">৳ <span id="totalExpenses">0</span></p>
+                    </div>
+                    <div class="bg-indigo-50/50 dark:bg-indigo-950/20 p-4 rounded-xl text-center border border-indigo-100 dark:border-indigo-900/40 shadow-sm">
+                        <p class="text-[11px] md:text-xs text-indigo-700 dark:text-indigo-400 font-bold uppercase tracking-wider">মাসিক খরচ এন্ট্রি</p>
+                        <p class="text-base md:text-lg font-bold text-indigo-600 dark:text-indigo-400 mt-1">৳ <span id="totalMonthlyExpenses">0</span></p>
+                    </div>
+                    <div class="bg-amber-50/50 dark:bg-amber-950/20 p-4 rounded-xl text-center border border-amber-100 dark:border-amber-900/40 shadow-sm">
+                        <p class="text-[11px] md:text-xs text-amber-700 dark:text-amber-400 font-bold uppercase tracking-wider">মোকাম হিসাব</p>
+                        <p class="text-base md:text-lg font-bold text-amber-600 dark:text-amber-400 mt-1">৳ <span id="totalMokam">0</span></p>
+                    </div>
+                    <div class="bg-teal-50/50 dark:bg-teal-950/20 p-4 rounded-xl text-center border border-teal-100 dark:border-teal-900/40 shadow-sm">
+                        <p class="text-[11px] md:text-xs text-teal-700 dark:text-teal-400 font-bold uppercase tracking-wider">তুলা ক্রয়</p>
+                        <p class="text-base md:text-lg font-bold text-teal-600 dark:text-teal-400 mt-1">৳ <span id="totalTulaKroy">0</span></p>
+                    </div>
+                    <div class="bg-sky-50/50 dark:bg-sky-950/20 p-4 rounded-xl text-center border border-sky-100 dark:border-sky-900/40 shadow-sm">
+                        <p class="text-[11px] md:text-xs text-sky-700 dark:text-sky-400 font-bold uppercase tracking-wider">শিমুল তুলা</p>
+                        <p class="text-base md:text-lg font-bold text-sky-600 dark:text-sky-400 mt-1">৳ <span id="totalShimulTula">0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h2 class="text-base md:text-lg font-bold text-emerald-700 dark:text-emerald-400 mb-3 flex items-center gap-2">💰 বিক্রয় হিসাব</h2>
+                    <form id="salesForm" class="grid grid-cols-12 gap-2 mb-3">
+                        <input type="text" id="saleDesc" placeholder="আইটেম/বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="saleAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <button type="submit" id="salesSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
+                    </form>
+                    <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
+                        <table class="w-full text-left border-collapse bg-white dark:bg-slate-900">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
+                                    <th class="p-2.5">বিবরণ</th>
+                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salesTableBody" class="text-xs md:text-sm text-slate-600 dark:text-slate-300 divide-y divide-slate-100 dark:divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h2 class="text-base md:text-lg font-bold text-rose-700 dark:text-rose-400 mb-3 flex items-center gap-2">💸 খরচ হিসাব</h2>
+                    <form id="expenseForm" class="grid grid-cols-12 gap-2 mb-3">
+                        <input type="text" id="expenseDesc" placeholder="খরচের বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="expenseAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <button type="submit" id="expenseSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
+                    </form>
+                    <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
+                        <table class="w-full text-left border-collapse bg-white dark:bg-slate-900">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
+                                    <th class="p-2.5">বিবরণ</th>
+                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenseTableBody" class="text-xs md:text-sm text-slate-600 dark:text-slate-300 divide-y divide-slate-100 dark:divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h2 class="text-base md:text-lg font-bold text-indigo-700 dark:text-indigo-400 mb-3 flex items-center gap-2">📅 মাসিক খরচ</h2>
+                    <form id="monthlyExpenseForm" class="grid grid-cols-12 gap-2 mb-3">
+                        <input type="text" id="monthlyExpenseDesc" placeholder="খরচের বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="monthlyExpenseAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <button type="submit" id="monthlyExpenseSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
+                    </form>
+                    <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
+                        <table class="w-full text-left border-collapse bg-white dark:bg-slate-900">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
+                                    <th class="p-2.5">বিবরণ</th>
+                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthlyExpenseTableBody" class="text-xs md:text-sm text-slate-600 dark:text-slate-300 divide-y divide-slate-100 dark:divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900/60 p-5 select-none rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h2 class="text-base md:text-lg font-bold text-amber-700 dark:text-amber-400 mb-3 flex items-center gap-2">🏢 মোকাম হিসাব</h2>
+                    <form id="mokamForm" class="grid grid-cols-12 gap-2 mb-3">
+                        <input type="text" id="mokamDesc" placeholder="মোকামের বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="mokamAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <button type="submit" id="mokamSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
+                    </form>
+                    <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
+                        <table class="w-full text-left border-collapse bg-white dark:bg-slate-900">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
+                                    <th class="p-2.5">বিবরণ</th>
+                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mokamTableBody" class="text-xs md:text-sm text-slate-600 dark:text-slate-300 divide-y divide-slate-100 dark:divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h2 class="text-base md:text-lg font-bold text-teal-700 dark:text-teal-400 mb-3 flex items-center gap-2">🌾 তুলা ক্রয় হিসাব</h2>
+                    <form id="tulaKroyForm" class="grid grid-cols-12 gap-2 mb-3">
+                        <input type="text" id="tulaKroyDesc" placeholder="বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="tulaKroyAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <button type="submit" id="tulaKroySubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
+                    </form>
+                    <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
+                        <table class="w-full text-left border-collapse bg-white dark:bg-slate-900">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
+                                    <th class="p-2.5">বিবরণ</th>
+                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tulaKroyTableBody" class="text-xs md:text-sm text-slate-600 dark:text-slate-300 divide-y divide-slate-100 dark:divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h2 class="text-base md:text-lg font-bold text-sky-700 dark:text-sky-400 mb-3 flex items-center gap-2">☁️ শিমুল তুলা হিসাব</h2>
+                    <form id="shimulTulaForm" class="grid grid-cols-12 gap-2 mb-3">
+                        <input type="text" id="shimulTulaDesc" placeholder="বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="shimulTulaAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <button type="submit" id="shimulTulaSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
+                    </form>
+                    <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
+                        <table class="w-full text-left border-collapse bg-white dark:bg-slate-900">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
+                                    <th class="p-2.5">বিবরণ</th>
+                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="shimulTulaTableBody" class="text-xs md:text-sm text-slate-600 dark:text-slate-300 divide-y divide-slate-100 dark:divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const dateInput = document.getElementById('appDate');
+        const monthInput = document.getElementById('summaryMonth');
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+        
+        // Forms
+        const salesForm = document.getElementById('salesForm');
+        const expenseForm = document.getElementById('expenseForm');
+        const monthlyExpenseForm = document.getElementById('monthlyExpenseForm');
+        const mokamForm = document.getElementById('mokamForm');
+        const tulaKroyForm = document.getElementById('tulaKroyForm');
+        const shimulTulaForm = document.getElementById('shimulTulaForm');
+        
+        // Edit State Tracker
+        let editStates = {
+            sales: null,
+            expenses: null,
+            monthlyExpenses: null,
+            mokam: null,
+            tulaKroy: null,
+            shimulTula: null
+        };
+
+        // Dark Mode Logic
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeToggleIcon.innerText = '☀️';
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeToggleIcon.innerText = '🌙';
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                themeToggleIcon.innerText = '🌙';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggleIcon.innerText = '☀️';
+            }
+        });
+
+        const today = new Date();
+        dateInput.value = today.toISOString().split('T')[0];
+        monthInput.value = today.toISOString().slice(0, 7);
+
+        let storeData = JSON.parse(localStorage.getItem('asifBeddingData')) || {};
+
+        function getSelectedDateData() {
+            const date = dateInput.value;
+            if (!storeData[date]) {
+                storeData[date] = {};
+            }
+            // Auto initialize all keys safely if old backup missing any fields
+            const keys = ['sales', 'expenses', 'monthlyExpenses', 'mokam', 'tulaKroy', 'shimulTula'];
+            keys.forEach(key => {
+                if (!storeData[date][key]) storeData[date][key] = [];
+            });
+            return storeData[date];
+        }
+
+        function saveData() {
+            localStorage.setItem('asifBeddingData', JSON.stringify(storeData));
+            updateUI();
+        }
+
+        function renderSection(items, bodyId, totalId) {
+            const body = document.getElementById(bodyId);
+            body.innerHTML = '';
+            let total = 0;
+            
+            if (!items) items = [];
+            
+            items.forEach((item, index) => {
+                total += item.amount;
+                body.innerHTML += `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td class="p-2.5 truncate max-w-[150px] font-medium text-slate-700 dark:text-slate-300">${item.desc}</td>
+                        <td class="p-2.5 text-right font-semibold text-slate-900 dark:text-slate-100">৳${item.amount}</td>
+                        <td class="p-2.5 text-center flex justify-center gap-2">
+                            <button onclick="editItem('${bodyId}', ${index})" class="text-blue-500 hover:text-blue-700 dark:text-blue-400 cursor-pointer text-xs" title="এডিট">✏️</button>
+                            <button onclick="deleteItem('${bodyId}', ${index})" class="text-rose-500 hover:text-rose-700 dark:text-rose-400 cursor-pointer text-xs" title="ডিলিট">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById(totalId).innerText = total.toLocaleString('bn-BD');
+        }
+
+        function updateReportsSummary() {
+            const targetMonth = monthInput.value; 
+            if (!targetMonth) return;
+
+            const parts = targetMonth.split('-');
+            const targetYear = parts[0]; 
+
+            const monthsBn = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
+            const monthLabelName = monthsBn[parseInt(parts[1]) - 1] + " " + parseInt(parts[0]).toLocaleString('bn-BD', {useGrouping:false});
+            document.getElementById('monthlyLabel').innerText = monthLabelName + " (মাস)";
+            
+            const yearLabelName = parseInt(targetYear).toLocaleString('bn-BD', {useGrouping:false});
+            document.getElementById('yearlyLabel').innerText = yearLabelName + " (বছর)";
+
+            let mSales = 0, mExpenses = 0, mMonthlyExp = 0, mMokam = 0, mTula = 0, mShimul = 0;
+            let ySales = 0, yExpenses = 0, yMonthlyExp = 0, yMokam = 0, yTula = 0, yShimul = 0;
+
+            Object.keys(storeData).forEach(dateKey => {
+                if (dateKey.startsWith(targetMonth)) {
+                    const dayData = storeData[dateKey];
+                    if (dayData.sales) dayData.sales.forEach(i => mSales += i.amount);
+                    if (dayData.expenses) dayData.expenses.forEach(i => mExpenses += i.amount);
+                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => mMonthlyExp += i.amount);
+                    if (dayData.mokam) dayData.mokam.forEach(i => mMokam += i.amount);
+                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => mTula += i.amount);
+                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => mShimul += i.amount);
+                }
+                
+                if (dateKey.startsWith(targetYear)) {
+                    const dayData = storeData[dateKey];
+                    if (dayData.sales) dayData.sales.forEach(i => ySales += i.amount);
+                    if (dayData.expenses) dayData.expenses.forEach(i => yExpenses += i.amount);
+                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => yMonthlyExp += i.amount);
+                    if (dayData.mokam) dayData.mokam.forEach(i => yMokam += i.amount);
+                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => yTula += i.amount);
+                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => yShimul += i.amount);
+                }
+            });
+
+            document.getElementById('mTotalSales').innerText = mSales.toLocaleString('bn-BD');
+            document.getElementById('mTotalExpenses').innerText = mExpenses.toLocaleString('bn-BD');
+            document.getElementById('mTotalMonthlyExpenses').innerText = mMonthlyExp.toLocaleString('bn-BD');
+            document.getElementById('mTotalMokam').innerText = mMokam.toLocaleString('bn-BD');
+            document.getElementById('mTotalTulaKroy').innerText = mTula.toLocaleString('bn-BD');
+            document.getElementById('mTotalShimulTula').innerText = mShimul.toLocaleString('bn-BD');
+
+            document.getElementById('yTotalSales').innerText = ySales.toLocaleString('bn-BD');
+            document.getElementById('yTotalExpenses').innerText = yExpenses.toLocaleString('bn-BD');
+            document.getElementById('yTotalMonthlyExpenses').innerText = yMonthlyExp.toLocaleString('bn-BD');
+            document.getElementById('yTotalMokam').innerText = yMokam.toLocaleString('bn-BD');
+            document.getElementById('yTotalTulaKroy').innerText = yTula.toLocaleString('bn-BD');
+            document.getElementById('yTotalShimulTula').innerText = yShimul.toLocaleString('bn-BD');
+        }
+
+        function updateUI() {
+            const data = getSelectedDateData();
+            
+            renderSection(data.sales, 'salesTableBody', 'totalSales');
+            renderSection(data.expenses, 'expenseTableBody', 'totalExpenses');
+            renderSection(data.monthlyExpenses, 'monthlyExpenseTableBody', 'totalMonthlyExpenses');
+            renderSection(data.mokam, 'mokamTableBody', 'totalMokam');
+            renderSection(data.tulaKroy, 'tulaKroyTableBody', 'totalTulaKroy');
+            renderSection(data.shimulTula, 'shimulTulaTableBody', 'totalShimulTula');
+
+            updateReportsSummary();
+        }
+
+        window.exportData = function() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storeData, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            const fileName = "ferdous_bedding_backup_" + new Date().toISOString().split('T')[0] + ".json";
+            downloadAnchorNode.setAttribute("download", fileName);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        window.importData = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (typeof importedData === 'object' && importedData !== null) {
+                        if (confirm("আপনি কি নতুন ব্যাকআপ ফাইলটি রিস্টোর করতে চান?")) {
+                            storeData = { ...storeData, ...importedData };
+                            saveData();
+                            alert("ডাটা সফলভাবে রিস্টোর ও সিঙ্ক করা হয়েছে!");
+                        }
+                    } else {
+                        alert("ভুল ফাইল ফরম্যাট!");
+                    }
+                } catch (err) {
+                    alert("ফাইলটি পড়তে সমস্যা হয়েছে।");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        const keyMap = {
+            'salesTableBody': 'sales',
+            'expenseTableBody': 'expenses',
+            'monthlyExpenseTableBody': 'monthlyExpenses',
+            'mokamTableBody': 'mokam',
+            'tulaKroyTableBody': 'tulaKroy',
+            'shimulTulaTableBody': 'shimulTula'
+        };
+
+        const formInputMap = {
+            'sales': { desc: 'saleDesc', amount: 'saleAmount', btn: 'salesSubmitBtn' },
+            'expenses': { desc: 'expenseDesc', amount: 'expenseAmount', btn: 'expenseSubmitBtn' },
+            'monthlyExpenses': { desc: 'monthlyExpenseDesc', amount: 'monthlyExpenseAmount', btn: 'monthlyExpenseSubmitBtn' },
+            'mokam': { desc: 'mokamDesc', amount: 'mokamAmount', btn: 'mokamSubmitBtn' },
+            'tulaKroy': { desc: 'tulaKroyDesc', amount: 'tulaKroyAmount', btn: 'tulaKroySubmitBtn' },
+            'shimulTula': { desc: 'shimulTulaDesc', amount: 'shimulTulaAmount', btn: 'shimulTulaSubmitBtn' }
+        };
+
+        function setupFormListener(form, dataKey) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const mapping = formInputMap[dataKey];
+                const desc = document.getElementById(mapping.desc).value;
+                const amount = parseFloat(document.getElementById(mapping.amount).value);
+                
+                const sectionData = getSelectedDateData()[dataKey];
+
+                if (editStates[dataKey] !== null) {
+                    sectionData[editStates[dataKey]] = { desc, amount };
+                    editStates[dataKey] = null;
+                    document.getElementById(mapping.btn).innerText = '+';
+                    document.getElementById(mapping.btn).className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+                } else {
+                    sectionData.push({ desc, amount });
+                }
+
+                form.reset();
+                saveData();
+            });
+        }
+
+        setupFormListener(salesForm, 'sales');
+        setupFormListener(expenseForm, 'expenses');
+        setupFormListener(monthlyExpenseForm, 'monthlyExpenses');
+        setupFormListener(mokamForm, 'mokam');
+        setupFormListener(tulaKroyForm, 'tulaKroy');
+        setupFormListener(shimulTulaForm, 'shimulTula');
+
+        window.editItem = function(bodyId, index) {
+            const dataKey = keyMap[bodyId];
+            const mapping = formInputMap[dataKey];
+            const item = getSelectedDateData()[dataKey][index];
+
+            document.getElementById(mapping.desc).value = item.desc;
+            document.getElementById(mapping.amount).value = item.amount;
+            
+            editStates[dataKey] = index;
+            
+            const btn = document.getElementById(mapping.btn);
+            btn.innerText = '✓';
+            btn.className = "col-span-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+            document.getElementById(mapping.desc).focus();
+        }
+
+        window.deleteItem = function(bodyId, index) {
+            const dataKey = keyMap[bodyId];
+            if (dataKey) {
+                getSelectedDateData()[dataKey].splice(index, 1);
+                if (editStates[dataKey] === index) {
+                    editStates[dataKey] = null;
+                    const mapping = formInputMap[dataKey];
+                    document.getElementById(mapping.btn).innerText = '+';
+                    document.getElementById(mapping.btn).className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+                    document.getElementById(mapping.btn).form.reset();
+                }
+                saveData();
+            }
+        }
+
+        dateInput.addEventListener('change', () => {
+            Object.keys(editStates).forEach(key => editStates[key] = null);
+            Object.values(formInputMap).forEach(mapping => {
+                document.getElementById(mapping.btn).innerText = '+';
+                document.getElementById(mapping.btn).className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+                document.getElementById(mapping.btn).form.reset();
+            });
+            updateUI();
+        });
+
+        monthInput.addEventListener('change', () => {
+            updateReportsSummary();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>
