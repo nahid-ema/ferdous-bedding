@@ -271,14 +271,14 @@
         // 🔑 FIREBASE CONFIGURATION PLACEHOLDER
         // ফায়ারবেস কনসোল থেকে আপনার রিয়েল কি-গুলো নিচের অংশে পরিবর্তন করুন:
         const firebaseConfig = {
-    apiKey: "AIzaSyCaNCOEIQlA5u2KiBPDbSGlJItpoLLLfYg",
+    apiKey: "YOUR_API_KEY",
     authDomain: "asif-911bf.firebaseapp.com",
+    databaseURL: "https://asif-911bf-default-rtdb.asia-southeast1.firebasedatabase.app", // 👈 এই লাইনটি এভাবে পরিবর্তন করুন
     projectId: "asif-911bf",
-    storageBucket: "asif-911bf.firebasestorage.app",
-    messagingSenderId: "671825009883",
-    appId: "1:671825009883:web:2fb39d37d9aefe3ab940fe",
-    measurementId: "G-17SGVWYH32"
-  };
+    storageBucket: "asif-911bf.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
 
         // Firebase Activation Check
         const isFirebaseConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY";
