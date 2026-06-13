@@ -12,6 +12,9 @@
         }
     </script>
     
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght=400;500;600;700&display=swap');
         body { font-family: 'Hind Siliguri', sans-serif; }
@@ -43,7 +46,8 @@
                     </div>
                 </div>
                 
-                <div class="flex flex-wrap gap-2 w-full lg:w-auto bg-slate-50 dark:bg-slate-950 p-2 rounded-xl border border-slate-200 dark:border-slate-800/60">
+                <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto bg-slate-50 dark:bg-slate-950 p-2 rounded-xl border border-slate-200 dark:border-slate-800/60">
+                    <span id="syncStatus" class="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400">LocalStorage মোড</span>
                     <button onclick="exportData()" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs md:text-sm font-medium py-2 px-4 rounded-lg shadow-sm cursor-pointer transition-colors">
                         📥 ব্যাকআপ ডাউনলোড
                     </button>
@@ -197,7 +201,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-slate-900/60 p-5 select-none rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                     <h2 class="text-base md:text-lg font-bold text-amber-700 dark:text-amber-400 mb-3 flex items-center gap-2">🏢 মোকাম হিসাব</h2>
                     <form id="mokamForm" class="grid grid-cols-12 gap-2 mb-3">
                         <input type="text" id="mokamDesc" placeholder="মোকামের বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
@@ -264,6 +268,30 @@
     </div>
 
     <script>
+        // 🔑 FIREBASE CONFIGURATION PLACEHOLDER
+        // ফায়ারবেস কনসোল থেকে আপনার রিয়েল কি-গুলো নিচের অংশে পরিবর্তন করুন:
+        const firebaseConfig = {
+    apiKey: "AIzaSyCaNCOEIQlA5u2KiBPDbSGlJItpoLLLfYg",
+    authDomain: "asif-911bf.firebaseapp.com",
+    projectId: "asif-911bf",
+    storageBucket: "asif-911bf.firebasestorage.app",
+    messagingSenderId: "671825009883",
+    appId: "1:671825009883:web:2fb39d37d9aefe3ab940fe",
+    measurementId: "G-17SGVWYH32"
+  };
+
+        // Firebase Activation Check
+        const isFirebaseConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY";
+        let db = null;
+
+        if (isFirebaseConfigured) {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            const statusEl = document.getElementById('syncStatus');
+            statusEl.innerText = "☁️ ক্লাউড সিঙ্ক লাইভ";
+            statusEl.className = "text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400";
+        }
+
         // DOM Elements
         const dateInput = document.getElementById('appDate');
         const monthInput = document.getElementById('summaryMonth');
@@ -320,7 +348,6 @@
             if (!storeData[date]) {
                 storeData[date] = {};
             }
-            // Auto initialize all keys safely if old backup missing any fields
             const keys = ['sales', 'expenses', 'monthlyExpenses', 'mokam', 'tulaKroy', 'shimulTula'];
             keys.forEach(key => {
                 if (!storeData[date][key]) storeData[date][key] = [];
@@ -330,7 +357,22 @@
 
         function saveData() {
             localStorage.setItem('asifBeddingData', JSON.stringify(storeData));
+            if (isFirebaseConfigured) {
+                db.ref('beddingData').set(storeData).catch(err => console.error("Firebase Sync Error:", err));
+            }
             updateUI();
+        }
+
+        // Live Cloud Sync Listener
+        if (isFirebaseConfigured) {
+            db.ref('beddingData').on('value', (snapshot) => {
+                const cloudData = snapshot.val();
+                if (cloudData) {
+                    storeData = cloudData;
+                    localStorage.setItem('asifBeddingData', JSON.stringify(storeData));
+                    updateUI();
+                }
+            });
         }
 
         function renderSection(items, bodyId, totalId) {
