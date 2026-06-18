@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ফেরদৌস বেডিং স্টোর - দৈনিক, মাসিক ও বার্ষিক হিসাব</title>
     
+    <!-- Tailwind Play CDN (Development/Standalone Mode) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -93,12 +94,12 @@
                                 <td class="p-3 md:p-4 text-right font-bold text-amber-600 dark:text-amber-400">৳<span id="yTotalMokam">0</span></td>
                             </tr>
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-slate-600 dark:text-slate-400">🌾 তুলা ক্রয়</td>
+                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-teal-600 dark:text-teal-400">🌾 তুলা ক্রয়</td>
                                 <td class="p-3 md:p-4 text-right font-bold text-teal-600 dark:text-teal-400">৳<span id="mTotalTulaKroy">0</span></td>
                                 <td class="p-3 md:p-4 text-right font-bold text-teal-600 dark:text-teal-400">৳<span id="yTotalTulaKroy">0</span></td>
                             </tr>
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-slate-600 dark:text-slate-400">💳 বকেয়া পরিশোধ হিসাব</td>
+                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-sky-600 dark:text-sky-400">💳 বকেয়া পরিশোধ হিসাব</td>
                                 <td class="p-3 md:p-4 text-right font-bold text-sky-600 dark:text-sky-400">৳<span id="mTotalShimulTula">0</span></td>
                                 <td class="p-3 md:p-4 text-right font-bold text-sky-600 dark:text-sky-400">৳<span id="yTotalShimulTula">0</span></td>
                             </tr>
@@ -142,7 +143,7 @@
                     <h2 class="text-base md:text-lg font-bold text-emerald-700 dark:text-emerald-400 mb-3 flex items-center gap-2">💰 বিক্রয় হিসাব</h2>
                     <form id="salesForm" class="grid grid-cols-12 gap-2 mb-3">
                         <input type="text" id="saleDesc" placeholder="আইটেম/বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="saleAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="saleAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
                         <button type="submit" id="salesSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
                     </form>
                     <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
@@ -163,7 +164,7 @@
                     <h2 class="text-base md:text-lg font-bold text-rose-700 dark:text-rose-400 mb-3 flex items-center gap-2">💸 খরচ হিসাব</h2>
                     <form id="expenseForm" class="grid grid-cols-12 gap-2 mb-3">
                         <input type="text" id="expenseDesc" placeholder="খরচের বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="expenseAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="expenseAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
                         <button type="submit" id="expenseSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
                     </form>
                     <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
@@ -184,7 +185,7 @@
                     <h2 class="text-base md:text-lg font-bold text-indigo-700 dark:text-indigo-400 mb-3 flex items-center gap-2">📅 মাসিক খরচ</h2>
                     <form id="monthlyExpenseForm" class="grid grid-cols-12 gap-2 mb-3">
                         <input type="text" id="monthlyExpenseDesc" placeholder="খরচের বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="monthlyExpenseAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="monthlyExpenseAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
                         <button type="submit" id="monthlyExpenseSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
                     </form>
                     <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
@@ -205,7 +206,7 @@
                     <h2 class="text-base md:text-lg font-bold text-amber-700 dark:text-amber-400 mb-3 flex items-center gap-2">🏢 মোকাম হিসাব</h2>
                     <form id="mokamForm" class="grid grid-cols-12 gap-2 mb-3">
                         <input type="text" id="mokamDesc" placeholder="মোকামের বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="mokamAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="mokamAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
                         <button type="submit" id="mokamSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
                     </form>
                     <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
@@ -226,7 +227,7 @@
                     <h2 class="text-base md:text-lg font-bold text-teal-700 dark:text-teal-400 mb-3 flex items-center gap-2">🌾 তুলা ক্রয় হিসাব</h2>
                     <form id="tulaKroyForm" class="grid grid-cols-12 gap-2 mb-3">
                         <input type="text" id="tulaKroyDesc" placeholder="বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="tulaKroyAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="tulaKroyAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
                         <button type="submit" id="tulaKroySubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
                     </form>
                     <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
@@ -247,7 +248,7 @@
                     <h2 class="text-base md:text-lg font-bold text-sky-700 dark:text-sky-400 mb-3 flex items-center gap-2">💳 বকেয়া পরিশোধ হিসাব</h2>
                     <form id="shimulTulaForm" class="grid grid-cols-12 gap-2 mb-3">
                         <input type="text" id="shimulTulaDesc" placeholder="বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="shimulTulaAmount" placeholder="টাকা" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="shimulTulaAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
                         <button type="submit" id="shimulTulaSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
                     </form>
                     <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
@@ -268,7 +269,7 @@
     </div>
 
     <script>
-        // 🔑 REALTIME FIREBASE CONFIGURATION (FULLY CONFIGURED)
+        // 🔑 REALTIME FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyCaNCOEIQlA5u2KiBPDbSGlJItpoLLLfYg",
             authDomain: "asif-911bf.firebaseapp.com",
@@ -280,7 +281,6 @@
             measurementId: "G-17SGVWYH32"
         };
 
-        // Firebase Activation Check
         const isFirebaseConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY";
         let db = null;
 
@@ -306,17 +306,11 @@
         const tulaKroyForm = document.getElementById('tulaKroyForm');
         const shimulTulaForm = document.getElementById('shimulTulaForm');
         
-        // Edit State Tracker
         let editStates = {
-            sales: null,
-            expenses: null,
-            monthlyExpenses: null,
-            mokam: null,
-            tulaKroy: null,
-            shimulTula: null
+            sales: null, expenses: null, monthlyExpenses: null, mokam: null, tulaKroy: null, shimulTula: null
         };
 
-        // Dark Mode Logic
+        // Dark Mode 
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             themeToggleIcon.innerText = '☀️';
@@ -345,9 +339,7 @@
 
         function getSelectedDateData() {
             const date = dateInput.value;
-            if (!storeData[date]) {
-                storeData[date] = {};
-            }
+            if (!storeData[date]) storeData[date] = {};
             const keys = ['sales', 'expenses', 'monthlyExpenses', 'mokam', 'tulaKroy', 'shimulTula'];
             keys.forEach(key => {
                 if (!storeData[date][key]) storeData[date][key] = [];
@@ -363,11 +355,10 @@
             updateUI();
         }
 
-        // Live Cloud Sync Listener
         if (isFirebaseConfigured) {
             db.ref('beddingData').on('value', (snapshot) => {
                 const cloudData = snapshot.val();
-                if (cloudData) {
+                if (cloudData && typeof cloudData === 'object') {
                     storeData = cloudData;
                     localStorage.setItem('asifBeddingData', JSON.stringify(storeData));
                     updateUI();
@@ -375,19 +366,32 @@
             });
         }
 
+        // Helper function to safely escape strings from HTML Injection
+        function escapeHtml(text) {
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         function renderSection(items, bodyId, totalId) {
             const body = document.getElementById(bodyId);
+            if (!body) return;
             body.innerHTML = '';
             let total = 0;
             
             if (!items) items = [];
+            let htmlContent = '';
             
             items.forEach((item, index) => {
-                total += item.amount;
-                body.innerHTML += `
+                const amount = parseFloat(item.amount) || 0;
+                total += amount;
+                htmlContent += `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-2.5 truncate max-w-[150px] font-medium text-slate-700 dark:text-slate-300">${item.desc}</td>
-                        <td class="p-2.5 text-right font-semibold text-slate-900 dark:text-slate-100">৳${item.amount}</td>
+                        <td class="p-2.5 truncate max-w-[150px] font-medium text-slate-700 dark:text-slate-300" title="${escapeHtml(item.desc)}">${escapeHtml(item.desc)}</td>
+                        <td class="p-2.5 text-right font-semibold text-slate-900 dark:text-slate-100">৳${amount.toLocaleString('bn-BD')}</td>
                         <td class="p-2.5 text-center flex justify-center gap-2">
                             <button onclick="editItem('${bodyId}', ${index})" class="text-blue-500 hover:text-blue-700 dark:text-blue-400 cursor-pointer text-xs" title="এডিট">✏️</button>
                             <button onclick="deleteItem('${bodyId}', ${index})" class="text-rose-500 hover:text-rose-700 dark:text-rose-400 cursor-pointer text-xs" title="ডিলিট">🗑️</button>
@@ -395,6 +399,7 @@
                     </tr>
                 `;
             });
+            body.innerHTML = htmlContent;
             document.getElementById(totalId).innerText = total.toLocaleString('bn-BD');
         }
 
@@ -403,13 +408,17 @@
             if (!targetMonth) return;
 
             const parts = targetMonth.split('-');
+            if (parts.length !== 2) return;
             const targetYear = parts[0]; 
 
             const monthsBn = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
-            const monthLabelName = monthsBn[parseInt(parts[1]) - 1] + " " + parseInt(parts[0]).toLocaleString('bn-BD', {useGrouping:false});
+            const monthIdx = parseInt(parts[1], 10) - 1;
+            if (monthIdx < 0 || monthIdx > 11) return;
+
+            const monthLabelName = monthsBn[monthIdx] + " " + parseInt(parts[0], 10).toLocaleString('bn-BD', {useGrouping:false});
             document.getElementById('monthlyLabel').innerText = monthLabelName + " (মাস)";
             
-            const yearLabelName = parseInt(targetYear).toLocaleString('bn-BD', {useGrouping:false});
+            const yearLabelName = parseInt(targetYear, 10).toLocaleString('bn-BD', {useGrouping:false});
             document.getElementById('yearlyLabel').innerText = yearLabelName + " (বছর)";
 
             let mSales = 0, mExpenses = 0, mMonthlyExp = 0, mMokam = 0, mTula = 0, mShimul = 0;
@@ -417,23 +426,23 @@
 
             Object.keys(storeData).forEach(dateKey => {
                 if (dateKey.startsWith(targetMonth)) {
-                    const dayData = storeData[dateKey];
-                    if (dayData.sales) dayData.sales.forEach(i => mSales += i.amount);
-                    if (dayData.expenses) dayData.expenses.forEach(i => mExpenses += i.amount);
-                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => mMonthlyExp += i.amount);
-                    if (dayData.mokam) dayData.mokam.forEach(i => mMokam += i.amount);
-                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => mTula += i.amount);
-                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => mShimul += i.amount);
+                    const dayData = storeData[dateKey] || {};
+                    if (dayData.sales) dayData.sales.forEach(i => mSales += (parseFloat(i.amount) || 0));
+                    if (dayData.expenses) dayData.expenses.forEach(i => mExpenses += (parseFloat(i.amount) || 0));
+                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => mMonthlyExp += (parseFloat(i.amount) || 0));
+                    if (dayData.mokam) dayData.mokam.forEach(i => mMokam += (parseFloat(i.amount) || 0));
+                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => mTula += (parseFloat(i.amount) || 0));
+                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => mShimul += (parseFloat(i.amount) || 0));
                 }
                 
                 if (dateKey.startsWith(targetYear)) {
-                    const dayData = storeData[dateKey];
-                    if (dayData.sales) dayData.sales.forEach(i => ySales += i.amount);
-                    if (dayData.expenses) dayData.expenses.forEach(i => yExpenses += i.amount);
-                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => yMonthlyExp += i.amount);
-                    if (dayData.mokam) dayData.mokam.forEach(i => yMokam += i.amount);
-                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => yTula += i.amount);
-                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => yShimul += i.amount);
+                    const dayData = storeData[dateKey] || {};
+                    if (dayData.sales) dayData.sales.forEach(i => ySales += (parseFloat(i.amount) || 0));
+                    if (dayData.expenses) dayData.expenses.forEach(i => yExpenses += (parseFloat(i.amount) || 0));
+                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => yMonthlyExp += (parseFloat(i.amount) || 0));
+                    if (dayData.mokam) dayData.mokam.forEach(i => yMokam += (parseFloat(i.amount) || 0));
+                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => yTula += (parseFloat(i.amount) || 0));
+                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => yShimul += (parseFloat(i.amount) || 0));
                 }
             });
 
@@ -454,14 +463,12 @@
 
         function updateUI() {
             const data = getSelectedDateData();
-            
             renderSection(data.sales, 'salesTableBody', 'totalSales');
             renderSection(data.expenses, 'expenseTableBody', 'totalExpenses');
             renderSection(data.monthlyExpenses, 'monthlyExpenseTableBody', 'totalMonthlyExpenses');
             renderSection(data.mokam, 'mokamTableBody', 'totalMokam');
             renderSection(data.tulaKroy, 'tulaKroyTableBody', 'totalTulaKroy');
             renderSection(data.shimulTula, 'shimulTulaTableBody', 'totalShimulTula');
-
             updateReportsSummary();
         }
 
@@ -501,12 +508,8 @@
         }
 
         const keyMap = {
-            'salesTableBody': 'sales',
-            'expenseTableBody': 'expenses',
-            'monthlyExpenseTableBody': 'monthlyExpenses',
-            'mokamTableBody': 'mokam',
-            'tulaKroyTableBody': 'tulaKroy',
-            'shimulTulaTableBody': 'shimulTula'
+            'salesTableBody': 'sales', 'expenseTableBody': 'expenses', 'monthlyExpenseTableBody': 'monthlyExpenses',
+            'mokamTableBody': 'mokam', 'tulaKroyTableBody': 'tulaKroy', 'shimulTulaTableBody': 'shimulTula'
         };
 
         const formInputMap = {
@@ -522,16 +525,23 @@
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const mapping = formInputMap[dataKey];
-                const desc = document.getElementById(mapping.desc).value;
+                const desc = document.getElementById(mapping.desc).value.trim();
                 const amount = parseFloat(document.getElementById(mapping.amount).value);
                 
+                // Strict Input Validation to prevent NaN errors
+                if (!desc || isNaN(amount) || amount < 0) {
+                    alert("দয়া করে সঠিক বিবরণ এবং অংক (টাকা) লিখুন।");
+                    return;
+                }
+
                 const sectionData = getSelectedDateData()[dataKey];
 
                 if (editStates[dataKey] !== null) {
                     sectionData[editStates[dataKey]] = { desc, amount };
                     editStates[dataKey] = null;
-                    document.getElementById(mapping.btn).innerText = '+';
-                    document.getElementById(mapping.btn).className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+                    const btn = document.getElementById(mapping.btn);
+                    btn.innerText = '+';
+                    btn.className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
                 } else {
                     sectionData.push({ desc, amount });
                 }
@@ -551,8 +561,10 @@
         window.editItem = function(bodyId, index) {
             const dataKey = keyMap[bodyId];
             const mapping = formInputMap[dataKey];
-            const item = getSelectedDateData()[dataKey][index];
-
+            const sectionData = getSelectedDateData()[dataKey];
+            if (!sectionData || !sectionData[index]) return;
+            
+            const item = sectionData[index];
             document.getElementById(mapping.desc).value = item.desc;
             document.getElementById(mapping.amount).value = item.amount;
             
@@ -567,13 +579,20 @@
         window.deleteItem = function(bodyId, index) {
             const dataKey = keyMap[bodyId];
             if (dataKey) {
-                getSelectedDateData()[dataKey].splice(index, 1);
+                const sectionData = getSelectedDateData()[dataKey];
+                sectionData.splice(index, 1);
+                
+                // Reset form state properly if edited item is deleted
                 if (editStates[dataKey] === index) {
                     editStates[dataKey] = null;
                     const mapping = formInputMap[dataKey];
-                    document.getElementById(mapping.btn).innerText = '+';
-                    document.getElementById(mapping.btn).className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
-                    document.getElementById(mapping.btn).form.reset();
+                    const btn = document.getElementById(mapping.btn);
+                    btn.innerText = '+';
+                    btn.className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+                    if (btn.form) btn.form.reset();
+                } else if (editStates[dataKey] > index) {
+                    // Safe offset shift if an item above the current edit state gets deleted
+                    editStates[dataKey]--;
                 }
                 saveData();
             }
@@ -582,9 +601,10 @@
         dateInput.addEventListener('change', () => {
             Object.keys(editStates).forEach(key => editStates[key] = null);
             Object.values(formInputMap).forEach(mapping => {
-                document.getElementById(mapping.btn).innerText = '+';
-                document.getElementById(mapping.btn).className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
-                document.getElementById(mapping.btn).form.reset();
+                const btn = document.getElementById(mapping.btn);
+                btn.innerText = '+';
+                btn.className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+                if (btn.form) btn.form.reset();
             });
             updateUI();
         });
