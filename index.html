@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ফেরদৌস বেডিং স্টোর - দৈনিক, মাসিক ও বার্ষিক হিসাব</title>
     
-    <!-- Tailwind Play CDN (Development/Standalone Mode) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -15,17 +14,42 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght=400;500;600;700&display=swap');
         body { font-family: 'Hind Siliguri', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen p-2 sm:p-4 md:p-6 lg:p-8 transition-colors duration-200">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen p-2 sm:p-4 md:p-6 lg:p-8 transition-colors duration-200 flex flex-col justify-center items-center">
 
-    <div class="w-full max-w-[1440px] mx-auto bg-white dark:bg-slate-900 rounded-2xl shadow-md overflow-hidden border border-slate-200/80 dark:border-slate-800">
+    <div id="authContainer" class="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-md overflow-hidden border border-slate-200/80 dark:border-slate-800 p-6 md:p-8 hidden">
+        <h2 id="authTitle" class="text-2xl font-bold text-center text-slate-800 dark:text-slate-100 mb-6">লগইন করুন</h2>
+        <form id="authForm" class="space-y-4">
+            <div>
+                <label class="block text-xs md:text-sm font-bold text-slate-600 dark:text-slate-400 mb-1">ইমেইল ঠিকানা</label>
+                <input type="email" id="authEmail" required class="w-full border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+            </div>
+            <div>
+                <label class="block text-xs md:text-sm font-bold text-slate-600 dark:text-slate-400 mb-1">পাসওয়ার্ড</label>
+                <input type="password" id="authPassword" required minlength="6" class="w-full border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+            </div>
+            <p id="authError" class="text-xs text-rose-500 font-semibold hidden bg-rose-50 dark:bg-rose-950/30 p-2 rounded-lg"></p>
+            <button type="submit" id="authSubmitBtn" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl p-2.5 text-xs md:text-sm transition-colors cursor-pointer shadow-sm">লগইন</button>
+        </form>
+        <div class="mt-4 text-center">
+            <button id="toggleAuthMode" class="text-xs md:text-sm text-teal-600 dark:text-teal-400 font-semibold hover:underline cursor-pointer">নতুন অ্যাকাউন্ট তৈরি করুন</button>
+        </div>
+    </div>
+
+    <div id="appContainer" class="w-full max-w-[1440px] mx-auto bg-white dark:bg-slate-900 rounded-2xl shadow-md overflow-hidden border border-slate-200/80 dark:border-slate-800 hidden">
         
         <div class="bg-slate-900 dark:bg-slate-950 p-6 md:p-8 text-white text-center shadow-sm relative border-b border-slate-800 dark:border-slate-900">
+            <div class="absolute top-6 left-4 sm:left-6 flex items-center gap-2">
+                <span id="userEmailDisplay" class="hidden text-[10px] sm:text-xs text-slate-300 font-medium bg-slate-800 px-2 py-2 rounded-xl border border-slate-700 max-w-[120px] sm:max-w-none truncate"></span>
+                <button id="logoutBtn" class="bg-rose-600 hover:bg-rose-700 text-white text-[10px] sm:text-xs font-bold px-3 py-2 rounded-xl shadow-sm cursor-pointer transition-colors">🚪 লগআউট</button>
+            </div>
+
             <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wide text-slate-100">ফেরদৌস বেডিং স্টোর</h1>
             <p class="text-slate-400 mt-1.5 text-xs sm:text-sm md:text-base tracking-wider font-medium">দৈনিক, মাসিক ও বার্ষিক আর্থিক ট্র্যাকার</p>
             
@@ -283,13 +307,14 @@
 
         const isFirebaseConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY";
         let db = null;
+        let auth = null;
+        let currentUser = null;
+        let dbRef = null;
 
         if (isFirebaseConfigured) {
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
-            const statusEl = document.getElementById('syncStatus');
-            statusEl.innerText = "☁️ ক্লাউড সিঙ্ক লাইভ";
-            statusEl.className = "text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400";
+            auth = firebase.auth();
         }
 
         // DOM Elements
@@ -297,6 +322,17 @@
         const monthInput = document.getElementById('summaryMonth');
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeToggleIcon = document.getElementById('themeToggleIcon');
+        
+        // Auth Elements
+        const authContainer = document.getElementById('authContainer');
+        const appContainer = document.getElementById('appContainer');
+        const authForm = document.getElementById('authForm');
+        const authTitle = document.getElementById('authTitle');
+        const authSubmitBtn = document.getElementById('authSubmitBtn');
+        const toggleAuthMode = document.getElementById('toggleAuthMode');
+        const authError = document.getElementById('authError');
+        const userEmailDisplay = document.getElementById('userEmailDisplay');
+        const logoutBtn = document.getElementById('logoutBtn');
         
         // Forms
         const salesForm = document.getElementById('salesForm');
@@ -335,7 +371,97 @@
         dateInput.value = today.toISOString().split('T')[0];
         monthInput.value = today.toISOString().slice(0, 7);
 
-        let storeData = JSON.parse(localStorage.getItem('asifBeddingData')) || {};
+        let storeData = {};
+
+        // 🔐 AUTHENTICATION LOGIC & STATE HANDLING
+        let isSignUpMode = false;
+
+        toggleAuthMode.addEventListener('click', () => {
+            isSignUpMode = !isSignUpMode;
+            authError.classList.add('hidden');
+            authForm.reset();
+            if (isSignUpMode) {
+                authTitle.innerText = "নতুন অ্যাকাউন্ট তৈরি করুন";
+                authSubmitBtn.innerText = "রেজিস্ট্রেশন";
+                toggleAuthMode.innerText = "ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন";
+            } else {
+                authTitle.innerText = "লগইন করুন";
+                authSubmitBtn.innerText = "লগইন";
+                toggleAuthMode.innerText = "নতুন অ্যাকাউন্ট তৈরি করুন";
+            }
+        });
+
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value;
+            authError.classList.add('hidden');
+
+            if (!isFirebaseConfigured) return;
+
+            if (isSignUpMode) {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .catch(err => {
+                        authError.innerText = "ভুল ইমেইল/পাসওয়ার্ড অথবা অ্যাকাউন্ট ইতিমধ্যে বিদ্যমান।";
+                        authError.classList.remove('hidden');
+                    });
+            } else {
+                auth.signInWithEmailAndPassword(email, password)
+                    .catch(err => {
+                        authError.innerText = "ভুল ইমেইল অথবা পাসওয়ার্ড দেওয়া হয়েছে।";
+                        authError.classList.remove('hidden');
+                    });
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            if (auth) auth.signOut();
+        });
+
+        if (isFirebaseConfigured) {
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    authContainer.classList.add('hidden');
+                    appContainer.classList.remove('hidden');
+                    userEmailDisplay.innerText = user.email;
+                    userEmailDisplay.classList.remove('hidden');
+                    
+                    const statusEl = document.getElementById('syncStatus');
+                    statusEl.innerText = "☁️ ক্লাউড সিঙ্ক লাইভ";
+                    statusEl.className = "text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400";
+
+                    // User Specific Node Base Path Scoping
+                    dbRef = db.ref('users/' + user.uid + '/beddingData');
+                    
+                    dbRef.on('value', (snapshot) => {
+                        const cloudData = snapshot.val();
+                        if (cloudData && typeof cloudData === 'object') {
+                            storeData = cloudData;
+                            localStorage.setItem('asifBeddingData_' + user.uid, JSON.stringify(storeData));
+                            updateUI();
+                        } else {
+                            storeData = JSON.parse(localStorage.getItem('asifBeddingData_' + user.uid)) || {};
+                            updateUI();
+                        }
+                    });
+                } else {
+                    currentUser = null;
+                    storeData = {};
+                    if (dbRef) dbRef.off();
+                    authContainer.classList.remove('hidden');
+                    appContainer.classList.add('hidden');
+                    userEmailDisplay.classList.add('hidden');
+                    authForm.reset();
+                }
+            });
+        } else {
+            // Fallback UI configuration state error notice
+            authContainer.classList.remove('hidden');
+            authTitle.innerText = "Firebase কনফিগারেশন ত্রুটি";
+            authForm.classList.add('hidden');
+            toggleAuthMode.classList.add('hidden');
+        }
 
         function getSelectedDateData() {
             const date = dateInput.value;
@@ -348,22 +474,12 @@
         }
 
         function saveData() {
-            localStorage.setItem('asifBeddingData', JSON.stringify(storeData));
-            if (isFirebaseConfigured) {
-                db.ref('beddingData').set(storeData).catch(err => console.error("Firebase Sync Error:", err));
+            if (!currentUser) return;
+            localStorage.setItem('asifBeddingData_' + currentUser.uid, JSON.stringify(storeData));
+            if (isFirebaseConfigured && dbRef) {
+                dbRef.set(storeData).catch(err => console.error("Firebase Sync Error:", err));
             }
             updateUI();
-        }
-
-        if (isFirebaseConfigured) {
-            db.ref('beddingData').on('value', (snapshot) => {
-                const cloudData = snapshot.val();
-                if (cloudData && typeof cloudData === 'object') {
-                    storeData = cloudData;
-                    localStorage.setItem('asifBeddingData', JSON.stringify(storeData));
-                    updateUI();
-                }
-            });
         }
 
         // Helper function to safely escape strings from HTML Injection
@@ -612,8 +728,6 @@
         monthInput.addEventListener('change', () => {
             updateReportsSummary();
         });
-
-        updateUI();
     </script>
 </body>
 </html>
