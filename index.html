@@ -44,18 +44,26 @@
 
     <div id="appContainer" class="w-full max-w-[1440px] mx-auto bg-white dark:bg-slate-900 rounded-2xl shadow-md overflow-hidden border border-slate-200/80 dark:border-slate-800 hidden">
         
-        <div class="bg-slate-900 dark:bg-slate-950 p-6 md:p-8 text-white text-center shadow-sm relative border-b border-slate-800 dark:border-slate-900">
-            <div class="absolute top-6 left-4 sm:left-6 flex items-center gap-2">
-                <span id="userEmailDisplay" class="hidden text-[10px] sm:text-xs text-slate-300 font-medium bg-slate-800 px-2 py-2 rounded-xl border border-slate-700 max-w-[120px] sm:max-w-none truncate"></span>
-                <button id="logoutBtn" class="bg-rose-600 hover:bg-rose-700 text-white text-[10px] sm:text-xs font-bold px-3 py-2 rounded-xl shadow-sm cursor-pointer transition-colors">🚪 লগআউট</button>
+        <!-- নতুন হেডার লেআউট: বাটনগুলো উপরে আলাদা রো-তে রাখা হয়েছে -->
+        <div class="bg-slate-900 dark:bg-slate-950 p-4 md:p-6 text-white shadow-sm border-b border-slate-800 dark:border-slate-900 flex flex-col gap-4">
+            
+            <!-- ওপরের বাটন সেকশন -->
+            <div class="flex justify-between items-center w-full border-b border-slate-800 dark:border-slate-900 pb-3">
+                <div class="flex items-center gap-2">
+                    <span id="userEmailDisplay" class="hidden text-[10px] sm:text-xs text-slate-300 font-medium bg-slate-800 px-2.5 py-1.5 rounded-xl border border-slate-700 max-w-[150px] sm:max-w-none truncate"></span>
+                    <button id="logoutBtn" class="bg-rose-600 hover:bg-rose-700 text-white text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-xl shadow-sm cursor-pointer transition-colors">🚪 লগআউট</button>
+                </div>
+                
+                <button id="themeToggle" class="bg-slate-800 hover:bg-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800 p-2 rounded-xl text-sm transition-colors cursor-pointer border border-slate-700/60 dark:border-slate-800" title="থিম পরিবর্তন করুন">
+                    <span id="themeToggleIcon">🌙</span>
+                </button>
             </div>
 
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wide text-slate-100">ফেরদৌস বেডিং স্টোর</h1>
-            <p class="text-slate-400 mt-1.5 text-xs sm:text-sm md:text-base tracking-wider font-medium">দৈনিক, মাসিক ও বার্ষিক আর্থিক ট্র্যাকার</p>
-            
-            <button id="themeToggle" class="absolute top-6 right-4 sm:right-6 bg-slate-800 hover:bg-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800 p-2.5 rounded-xl text-base transition-colors cursor-pointer border border-slate-700/60 dark:border-slate-800" title="থিম পরিবর্তন করুন">
-                <span id="themeToggleIcon">🌙</span>
-            </button>
+            <!-- টাইটেল সেকশন -->
+            <div class="text-center py-2">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wide text-slate-100">ফেরদৌস বেডিং স্টোর</h1>
+                <p class="text-slate-400 mt-1.5 text-xs sm:text-sm md:text-base tracking-wider font-medium">দৈনিক, মাসিক ও বার্ষিক আর্থিক ট্র্যাকার</p>
+            </div>
         </div>
 
         <div class="p-4 sm:p-6 md:p-8">
@@ -162,7 +170,6 @@
                 </div>
             </div>
 
-            <!-- লেআউট পরিবর্তন: grid-cols-1 করার মাধ্যমে প্রতিটি সেকশনকে ফুল-উইডথ এক লাইনে আনা হয়েছে -->
             <div class="grid grid-cols-1 gap-6 mt-8">
                 <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                     <h2 class="text-base md:text-lg font-bold text-emerald-700 dark:text-emerald-400 mb-3 flex items-center gap-2">💰 বিক্রয় হিসাব</h2>
@@ -254,7 +261,7 @@
                     <h2 class="text-base md:text-lg font-bold text-teal-700 dark:text-teal-400 mb-3 flex items-center gap-2">🌾 তুলা ক্রয় হিসাব</h2>
                     <form id="tulaKroyForm" class="grid grid-cols-12 gap-2 mb-3">
                         <input type="text" id="tulaKroyDesc" placeholder="বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="tulaKroyAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="tulaKroyAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm text-right">
                         <button type="submit" id="tulaKroySubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
                     </form>
                     <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
@@ -296,7 +303,6 @@
     </div>
 
     <script>
-        // 🔑 REALTIME FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyCaNCOEIQlA5u2KiBPDbSGlJItpoLLLfYg",
             authDomain: "asif-911bf.firebaseapp.com",
@@ -325,13 +331,11 @@
             }
         }
 
-        // DOM Elements
         const dateInput = document.getElementById('appDate');
         const monthInput = document.getElementById('summaryMonth');
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeToggleIcon = document.getElementById('themeToggleIcon');
         
-        // Auth Elements
         const authContainer = document.getElementById('authContainer');
         const appContainer = document.getElementById('appContainer');
         const authForm = document.getElementById('authForm');
@@ -342,7 +346,6 @@
         const userEmailDisplay = document.getElementById('userEmailDisplay');
         const logoutBtn = document.getElementById('logoutBtn');
         
-        // Forms
         const salesForm = document.getElementById('salesForm');
         const expenseForm = document.getElementById('expenseForm');
         const monthlyExpenseForm = document.getElementById('monthlyExpenseForm');
@@ -354,7 +357,6 @@
             sales: null, expenses: null, monthlyExpenses: null, mokam: null, tulaKroy: null, shimulTula: null
         };
 
-        // Dark Mode 
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             themeToggleIcon.innerText = '☀️';
@@ -380,8 +382,6 @@
         monthInput.value = today.toISOString().slice(0, 7);
 
         let storeData = {};
-
-        // 🔐 AUTHENTICATION LOGIC & STATE HANDLING
         let isSignUpMode = false;
 
         toggleAuthMode.addEventListener('click', () => {
@@ -518,7 +518,6 @@
                     munafaTd = `<td class="p-2.5 text-right font-semibold text-slate-900 dark:text-slate-100">৳${munafa.toLocaleString('bn-BD')}</td>`;
                 }
 
-                // বিবরণকে truncate না করে সম্পূর্ণ দেখানোর ব্যবস্থা করা হয়েছে
                 htmlContent += `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                         <td class="p-2.5 font-medium text-slate-700 dark:text-slate-300 whitespace-normal break-words" title="${escapeHtml(item.desc)}">${escapeHtml(item.desc)}</td>
