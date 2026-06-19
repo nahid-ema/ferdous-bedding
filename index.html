@@ -305,16 +305,21 @@
             measurementId: "G-17SGVWYH32"
         };
 
-        const isFirebaseConfigured = firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY";
         let db = null;
         let auth = null;
         let currentUser = null;
         let dbRef = null;
+        let isFirebaseConfigured = false;
 
-        if (isFirebaseConfigured) {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-            auth = firebase.auth();
+        if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                auth = firebase.auth();
+                isFirebaseConfigured = true;
+            } catch(e) {
+                console.error("Firebase init failed: ", e);
+            }
         }
 
         // DOM Elements
@@ -431,7 +436,6 @@
                     statusEl.innerText = "☁️ ক্লাউড সিঙ্ক লাইভ";
                     statusEl.className = "text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400";
 
-                    // User Specific Node Base Path Scoping
                     dbRef = db.ref('users/' + user.uid + '/beddingData');
                     
                     dbRef.on('value', (snapshot) => {
@@ -456,11 +460,13 @@
                 }
             });
         } else {
-            // Fallback UI configuration state error notice
-            authContainer.classList.remove('hidden');
-            authTitle.innerText = "Firebase কনফিগারেশন ত্রুটি";
-            authForm.classList.add('hidden');
-            toggleAuthMode.classList.add('hidden');
+            // Local Storage only bootstrap if Firebase is unavailable
+            authContainer.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+            userEmailDisplay.classList.add('hidden');
+            logoutBtn.classList.add('hidden');
+            storeData = JSON.parse(localStorage.getItem('asifBeddingData_local')) || {};
+            updateUI();
         }
 
         function getSelectedDateData() {
@@ -474,15 +480,14 @@
         }
 
         function saveData() {
-            if (!currentUser) return;
-            localStorage.setItem('asifBeddingData_' + currentUser.uid, JSON.stringify(storeData));
-            if (isFirebaseConfigured && dbRef) {
+            const trackingId = currentUser ? currentUser.uid : 'local';
+            localStorage.setItem('asifBeddingData_' + trackingId, JSON.stringify(storeData));
+            if (isFirebaseConfigured && dbRef && currentUser) {
                 dbRef.set(storeData).catch(err => console.error("Firebase Sync Error:", err));
             }
             updateUI();
         }
 
-        // Helper function to safely escape strings from HTML Injection
         function escapeHtml(text) {
             return String(text)
                 .replace(/&/g, '&amp;')
@@ -644,7 +649,6 @@
                 const desc = document.getElementById(mapping.desc).value.trim();
                 const amount = parseFloat(document.getElementById(mapping.amount).value);
                 
-                // Strict Input Validation to prevent NaN errors
                 if (!desc || isNaN(amount) || amount < 0) {
                     alert("দয়া করে সঠিক বিবরণ এবং অংক (টাকা) লিখুন।");
                     return;
@@ -698,7 +702,6 @@
                 const sectionData = getSelectedDateData()[dataKey];
                 sectionData.splice(index, 1);
                 
-                // Reset form state properly if edited item is deleted
                 if (editStates[dataKey] === index) {
                     editStates[dataKey] = null;
                     const mapping = formInputMap[dataKey];
@@ -707,7 +710,6 @@
                     btn.className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
                     if (btn.form) btn.form.reset();
                 } else if (editStates[dataKey] > index) {
-                    // Safe offset shift if an item above the current edit state gets deleted
                     editStates[dataKey]--;
                 }
                 saveData();
