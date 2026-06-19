@@ -113,7 +113,7 @@
                                 <td class="p-3 md:p-4 text-right font-bold text-indigo-600 dark:text-indigo-400">৳<span id="yTotalMonthlyExpenses">0</span></td>
                             </tr>
                             <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-slate-600 dark:text-slate-400">🏢 মোকাম বিল</td>
+                                <td class="p-3 md:p-4 flex items-center gap-1.5 text-amber-600 dark:text-amber-400">🏢 মোকাম বিল</td>
                                 <td class="p-3 md:p-4 text-right font-bold text-amber-600 dark:text-amber-400">৳<span id="mTotalMokam">0</span></td>
                                 <td class="p-3 md:p-4 text-right font-bold text-amber-600 dark:text-amber-400">৳<span id="yTotalMokam">0</span></td>
                             </tr>
@@ -166,8 +166,9 @@
                 <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                     <h2 class="text-base md:text-lg font-bold text-emerald-700 dark:text-emerald-400 mb-3 flex items-center gap-2">💰 বিক্রয় হিসাব</h2>
                     <form id="salesForm" class="grid grid-cols-12 gap-2 mb-3">
-                        <input type="text" id="saleDesc" placeholder="আইটেম/বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="saleAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="text" id="saleDesc" placeholder="আইটেম/বিবরণ" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="saleAmount" placeholder="টাকা" required step="any" class="col-span-3 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="saleMunafa" placeholder="মুনাফা" required step="any" class="col-span-3 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
                         <button type="submit" id="salesSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
                     </form>
                     <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
@@ -175,7 +176,8 @@
                             <thead>
                                 <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
                                     <th class="p-2.5">বিবরণ</th>
-                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-20 text-right">টাকা</th>
+                                    <th class="p-2.5 w-20 text-right">মুনাফা</th>
                                     <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
                                 </tr>
                             </thead>
@@ -208,9 +210,8 @@
                 <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                     <h2 class="text-base md:text-lg font-bold text-indigo-700 dark:text-indigo-400 mb-3 flex items-center gap-2">📅 মাসিক খরচ</h2>
                     <form id="monthlyExpenseForm" class="grid grid-cols-12 gap-2 mb-3">
-                        <input type="text" id="monthlyExpenseDesc" placeholder="খরচের বিবরণ" required class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="monthlyExpenseAmount" placeholder="টাকা" required step="any" class="col-span-3 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
-                        <input type="number" id="monthlyExpenseMunafa" placeholder="মুনাফা" required step="any" class="col-span-3 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="text" id="monthlyExpenseDesc" placeholder="খরচের বিবরণ" required class="col-span-6 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
+                        <input type="number" id="monthlyExpenseAmount" placeholder="টাকা" required step="any" class="col-span-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-800 dark:text-white transition-all shadow-sm">
                         <button type="submit" id="monthlyExpenseSubmitBtn" class="col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center">+</button>
                     </form>
                     <div class="overflow-y-auto max-h-[260px] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner">
@@ -218,8 +219,7 @@
                             <thead>
                                 <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
                                     <th class="p-2.5">বিবরণ</th>
-                                    <th class="p-2.5 w-20 text-right">টাকা</th>
-                                    <th class="p-2.5 w-20 text-right">মুনাফা</th>
+                                    <th class="p-2.5 w-24 text-right">টাকা</th>
                                     <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
                                 </tr>
                             </thead>
@@ -513,7 +513,7 @@
                 total += amount;
                 
                 let munafaTd = '';
-                if (bodyId === 'monthlyExpenseTableBody') {
+                if (bodyId === 'salesTableBody') {
                     const munafa = parseFloat(item.munafa) || 0;
                     munafaTd = `<td class="p-2.5 text-right font-semibold text-slate-900 dark:text-slate-100">৳${munafa.toLocaleString('bn-BD')}</td>`;
                 }
@@ -644,9 +644,9 @@
         };
 
         const formInputMap = {
-            'sales': { desc: 'saleDesc', amount: 'saleAmount', btn: 'salesSubmitBtn' },
+            'sales': { desc: 'saleDesc', amount: 'saleAmount', munafa: 'saleMunafa', btn: 'salesSubmitBtn' },
             'expenses': { desc: 'expenseDesc', amount: 'expenseAmount', btn: 'expenseSubmitBtn' },
-            'monthlyExpenses': { desc: 'monthlyExpenseDesc', amount: 'monthlyExpenseAmount', munafa: 'monthlyExpenseMunafa', btn: 'monthlyExpenseSubmitBtn' },
+            'monthlyExpenses': { desc: 'monthlyExpenseDesc', amount: 'monthlyExpenseAmount', btn: 'monthlyExpenseSubmitBtn' },
             'mokam': { desc: 'mokamDesc', amount: 'mokamAmount', btn: 'mokamSubmitBtn' },
             'tulaKroy': { desc: 'tulaKroyDesc', amount: 'tulaKroyAmount', btn: 'tulaKroySubmitBtn' },
             'shimulTula': { desc: 'shimulTulaDesc', amount: 'shimulTulaAmount', btn: 'shimulTulaSubmitBtn' }
