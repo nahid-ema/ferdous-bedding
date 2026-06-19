@@ -162,7 +162,8 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <!-- লেআউট পরিবর্তন: grid-cols-1 করার মাধ্যমে প্রতিটি সেকশনকে ফুল-উইডথ এক লাইনে আনা হয়েছে -->
+            <div class="grid grid-cols-1 gap-6 mt-8">
                 <div class="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                     <h2 class="text-base md:text-lg font-bold text-emerald-700 dark:text-emerald-400 mb-3 flex items-center gap-2">💰 বিক্রয় হিসাব</h2>
                     <form id="salesForm" class="grid grid-cols-12 gap-2 mb-3">
@@ -176,8 +177,8 @@
                             <thead>
                                 <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
                                     <th class="p-2.5">বিবরণ</th>
-                                    <th class="p-2.5 w-20 text-right">টাকা</th>
-                                    <th class="p-2.5 w-20 text-right">মুনাফা</th>
+                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-24 text-right">মুনাফা</th>
                                     <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
                                 </tr>
                             </thead>
@@ -198,7 +199,7 @@
                             <thead>
                                 <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
                                     <th class="p-2.5">বিবরণ</th>
-                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-28 text-right">টাকা</th>
                                     <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
                                 </tr>
                             </thead>
@@ -219,7 +220,7 @@
                             <thead>
                                 <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
                                     <th class="p-2.5">বিবরণ</th>
-                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-28 text-right">টাকা</th>
                                     <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
                                 </tr>
                             </thead>
@@ -240,7 +241,7 @@
                             <thead>
                                 <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
                                     <th class="p-2.5">বিবরণ</th>
-                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-28 text-right">টাকা</th>
                                     <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
                                 </tr>
                             </thead>
@@ -261,7 +262,7 @@
                             <thead>
                                 <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
                                     <th class="p-2.5">বিবরণ</th>
-                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-28 text-right">টাকা</th>
                                     <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
                                 </tr>
                             </thead>
@@ -282,7 +283,7 @@
                             <thead>
                                 <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-xs uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-700">
                                     <th class="p-2.5">বিবরণ</th>
-                                    <th class="p-2.5 w-24 text-right">টাকা</th>
+                                    <th class="p-2.5 w-28 text-right">টাকা</th>
                                     <th class="p-2.5 w-16 text-center">অ্যাকশন</th>
                                 </tr>
                             </thead>
@@ -462,7 +463,6 @@
                 }
             });
         } else {
-            // Local Storage only bootstrap if Firebase is unavailable
             authContainer.classList.add('hidden');
             appContainer.classList.remove('hidden');
             userEmailDisplay.classList.add('hidden');
@@ -518,9 +518,10 @@
                     munafaTd = `<td class="p-2.5 text-right font-semibold text-slate-900 dark:text-slate-100">৳${munafa.toLocaleString('bn-BD')}</td>`;
                 }
 
+                // বিবরণকে truncate না করে সম্পূর্ণ দেখানোর ব্যবস্থা করা হয়েছে
                 htmlContent += `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-2.5 truncate max-w-[150px] font-medium text-slate-700 dark:text-slate-300" title="${escapeHtml(item.desc)}">${escapeHtml(item.desc)}</td>
+                        <td class="p-2.5 font-medium text-slate-700 dark:text-slate-300 whitespace-normal break-words" title="${escapeHtml(item.desc)}">${escapeHtml(item.desc)}</td>
                         <td class="p-2.5 text-right font-semibold text-slate-900 dark:text-slate-100">৳${amount.toLocaleString('bn-BD')}</td>
                         ${munafaTd}
                         <td class="p-2.5 text-center flex justify-center gap-2">
