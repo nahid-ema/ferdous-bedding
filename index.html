@@ -45,9 +45,31 @@
     <div id="appContainer" class="w-full max-w-[1440px] mx-auto bg-white dark:bg-slate-900 rounded-2xl shadow-md overflow-hidden border border-slate-200/80 dark:border-slate-800 hidden">
         
         <div class="bg-slate-900 dark:bg-slate-950 p-6 md:p-8 text-white text-center shadow-sm relative border-b border-slate-800 dark:border-slate-900">
-            <div class="absolute top-6 left-4 sm:left-6 flex items-center gap-2">
-                <span id="userEmailDisplay" class="hidden text-[10px] sm:text-xs text-slate-300 font-medium bg-slate-800 px-2 py-2 rounded-xl border border-slate-700 max-w-[120px] sm:max-w-none truncate"></span>
-                <button id="logoutBtn" class="bg-rose-600 hover:bg-rose-700 text-white text-[10px] sm:text-xs font-bold px-3 py-2 rounded-xl shadow-sm cursor-pointer transition-colors">🚪 লগআউট</button>
+            <div class="absolute top-6 left-4 sm:left-6 inline-block text-left">
+                <button id="menuToggleBtn" class="bg-slate-800 hover:bg-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800 text-white text-[10px] sm:text-xs font-bold px-3 py-2.5 rounded-xl shadow-sm cursor-pointer transition-colors border border-slate-700/60 dark:border-slate-800 flex items-center gap-1.5">
+                    ⚙️ মেনু
+                </button>
+
+                <div id="dropdownMenu" class="absolute top-full left-0 mt-2 w-56 sm:w-64 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 hidden flex-col z-50 text-left overflow-hidden">
+                    <div class="p-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                        <span id="userEmailDisplay" class="hidden text-[10px] sm:text-xs text-slate-600 dark:text-slate-300 font-medium block w-full truncate mb-2"></span>
+                        <span id="syncStatus" class="inline-block text-[10px] font-semibold px-2 py-1 rounded-md bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400">LocalStorage মোড</span>
+                    </div>
+                    <div class="p-2 flex flex-col gap-1">
+                        <button onclick="exportData()" class="w-full text-left flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-[11px] sm:text-xs font-medium py-2 px-3 rounded-lg transition-colors cursor-pointer">
+                            📥 ব্যাকআপ ডাউনলোড
+                        </button>
+                        <label class="w-full text-left flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-[11px] sm:text-xs font-medium py-2 px-3 rounded-lg transition-colors cursor-pointer mb-0">
+                            📤 ফাইল রিস্টোর
+                            <input type="file" id="importFile" accept=".json" class="hidden" onchange="importData(event)">
+                        </label>
+                    </div>
+                    <div class="p-2 border-t border-slate-100 dark:border-slate-800">
+                        <button id="logoutBtn" class="w-full text-left flex items-center gap-2 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-600 dark:text-rose-400 text-[11px] sm:text-xs font-bold py-2 px-3 rounded-lg transition-colors cursor-pointer">
+                            🚪 লগআউট
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wide text-slate-100">ফেরদৌস বেডিং স্টোর</h1>
@@ -71,16 +93,6 @@
                     </div>
                 </div>
                 
-                <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto bg-slate-50 dark:bg-slate-950 p-2 rounded-xl border border-slate-200 dark:border-slate-800/60">
-                    <span id="syncStatus" class="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400">LocalStorage মোড</span>
-                    <button onclick="exportData()" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs md:text-sm font-medium py-2 px-4 rounded-lg shadow-sm cursor-pointer transition-colors">
-                        📥 ব্যাকআপ ডাউনলোড
-                    </button>
-                    <label class="flex-1 sm:flex-none bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium py-2 px-4 rounded-lg shadow-sm cursor-pointer transition-colors text-center border border-slate-200 dark:border-slate-700">
-                        📤 ফাইল রিস্টোর
-                        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importData(event)">
-                    </label>
-                </div>
             </div>
 
             <div class="mb-8 p-4 md:p-6 bg-slate-50/60 dark:bg-slate-950/40 rounded-2xl border border-slate-200/60 dark:border-slate-900">
@@ -380,6 +392,22 @@
                 document.documentElement.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
                 themeToggleIcon.innerText = '☀️';
+            }
+        });
+
+        const menuToggleBtn = document.getElementById('menuToggleBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        menuToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('hidden');
+            dropdownMenu.classList.toggle('flex');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!menuToggleBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.add('hidden');
+                dropdownMenu.classList.remove('flex');
             }
         });
 
