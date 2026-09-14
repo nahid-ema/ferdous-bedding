@@ -321,6 +321,7 @@
         let currentUser = null;
         let dbRef = null;
         let isFirebaseConfigured = false;
+        let lastSyncedDataString = null;
 
         if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
             try {
@@ -453,16 +454,21 @@
                         const cloudData = snapshot.val();
                         if (cloudData && typeof cloudData === 'object') {
                             storeData = cloudData;
-                            localStorage.setItem('asifBeddingData_' + user.uid, JSON.stringify(storeData));
+                            const dataStr = JSON.stringify(storeData);
+                            localStorage.setItem('asifBeddingData_' + user.uid, dataStr);
+                            lastSyncedDataString = dataStr;
                             updateUI();
                         } else {
                             storeData = JSON.parse(localStorage.getItem('asifBeddingData_' + user.uid)) || {};
+                            const dataStr = JSON.stringify(storeData);
+                            lastSyncedDataString = dataStr;
                             updateUI();
                         }
                     });
                 } else {
                     currentUser = null;
                     storeData = {};
+                    lastSyncedDataString = null;
                     if (dbRef) dbRef.off();
                     authContainer.classList.remove('hidden');
                     appContainer.classList.add('hidden');
@@ -492,9 +498,39 @@
 
         function saveData() {
             const trackingId = currentUser ? currentUser.uid : 'local';
-            localStorage.setItem('asifBeddingData_' + trackingId, JSON.stringify(storeData));
+            const dataString = JSON.stringify(storeData);
+            localStorage.setItem('asifBeddingData_' + trackingId, dataString);
+
             if (isFirebaseConfigured && dbRef && currentUser) {
-                dbRef.set(storeData).catch(err => console.error("Firebase Sync Error:", err));
+                if (!lastSyncedDataString) {
+                    dbRef.set(storeData).catch(err => console.error("Firebase Sync Error:", err));
+                    lastSyncedDataString = dataString;
+                } else if (dataString !== lastSyncedDataString) {
+                    const lastSyncedData = JSON.parse(lastSyncedDataString);
+                    const updates = {};
+                    let hasChanges = false;
+
+                    for (const key in storeData) {
+                        const currStr = JSON.stringify(storeData[key]);
+                        const lastStr = JSON.stringify(lastSyncedData[key]);
+                        if (currStr !== lastStr) {
+                            updates[key] = storeData[key];
+                            hasChanges = true;
+                        }
+                    }
+
+                    for (const key in lastSyncedData) {
+                        if (!(key in storeData)) {
+                            updates[key] = null;
+                            hasChanges = true;
+                        }
+                    }
+
+                    if (hasChanges) {
+                        dbRef.update(updates).catch(err => console.error("Firebase Sync Error:", err));
+                        lastSyncedDataString = dataString;
+                    }
+                }
             }
             updateUI();
         }
