@@ -304,6 +304,8 @@
     </div>
 
     <script>
+        const DEFAULT_BTN_CLASS = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+
         // 🔑 REALTIME FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyCaNCOEIQlA5u2KiBPDbSGlJItpoLLLfYg",
@@ -742,7 +744,7 @@
                     editStates[dataKey] = null;
                     const btn = document.getElementById(mapping.btn);
                     btn.innerText = '+';
-                    btn.className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+                    btn.className = DEFAULT_BTN_CLASS;
                 } else {
                     sectionData.push(itemData);
                 }
@@ -792,7 +794,7 @@
                     const mapping = formInputMap[dataKey];
                     const btn = document.getElementById(mapping.btn);
                     btn.innerText = '+';
-                    btn.className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+                    btn.className = DEFAULT_BTN_CLASS;
                     if (btn.form) btn.form.reset();
                 } else if (editStates[dataKey] > index) {
                     editStates[dataKey]--;
@@ -806,7 +808,7 @@
             Object.values(formInputMap).forEach(mapping => {
                 const btn = document.getElementById(mapping.btn);
                 btn.innerText = '+';
-                btn.className = "col-span-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold rounded-xl text-xs md:text-sm transition-colors cursor-pointer flex items-center justify-center";
+                btn.className = DEFAULT_BTN_CLASS;
                 if (btn.form) btn.form.reset();
             });
             updateUI();
