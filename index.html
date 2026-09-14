@@ -568,30 +568,65 @@
             let ySales = 0, yExpenses = 0, yMonthlyExp = 0, yMokam = 0, yTula = 0, yShimul = 0, yMunafa = 0;
 
             Object.keys(storeData).forEach(dateKey => {
-                if (dateKey.startsWith(targetMonth)) {
-                    const dayData = storeData[dateKey] || {};
-                    if (dayData.sales) dayData.sales.forEach(i => {
-                        mSales += (parseFloat(i.amount) || 0);
-                        mMunafa += (parseFloat(i.munafa) || 0);
-                    });
-                    if (dayData.expenses) dayData.expenses.forEach(i => mExpenses += (parseFloat(i.amount) || 0));
-                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => mMonthlyExp += (parseFloat(i.amount) || 0));
-                    if (dayData.mokam) dayData.mokam.forEach(i => mMokam += (parseFloat(i.amount) || 0));
-                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => mTula += (parseFloat(i.amount) || 0));
-                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => mShimul += (parseFloat(i.amount) || 0));
-                }
+                const isMonth = dateKey.startsWith(targetMonth);
+                const isYear = dateKey.startsWith(targetYear);
                 
-                if (dateKey.startsWith(targetYear)) {
-                    const dayData = storeData[dateKey] || {};
-                    if (dayData.sales) dayData.sales.forEach(i => {
-                        ySales += (parseFloat(i.amount) || 0);
-                        yMunafa += (parseFloat(i.munafa) || 0);
-                    });
-                    if (dayData.expenses) dayData.expenses.forEach(i => yExpenses += (parseFloat(i.amount) || 0));
-                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => yMonthlyExp += (parseFloat(i.amount) || 0));
-                    if (dayData.mokam) dayData.mokam.forEach(i => yMokam += (parseFloat(i.amount) || 0));
-                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => yTula += (parseFloat(i.amount) || 0));
-                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => yShimul += (parseFloat(i.amount) || 0));
+                if (!isMonth && !isYear) return;
+
+                const dayData = storeData[dateKey] || {};
+                let dSales = 0, dMunafa = 0, dExpenses = 0, dMonthlyExp = 0, dMokam = 0, dTula = 0, dShimul = 0;
+
+                if (dayData.sales) {
+                    for (let i = 0; i < dayData.sales.length; i++) {
+                        const item = dayData.sales[i];
+                        dSales += (Number(item.amount) || 0);
+                        dMunafa += (Number(item.munafa) || 0);
+                    }
+                }
+                if (dayData.expenses) {
+                    for (let i = 0; i < dayData.expenses.length; i++) {
+                        dExpenses += (Number(dayData.expenses[i].amount) || 0);
+                    }
+                }
+                if (dayData.monthlyExpenses) {
+                    for (let i = 0; i < dayData.monthlyExpenses.length; i++) {
+                        dMonthlyExp += (Number(dayData.monthlyExpenses[i].amount) || 0);
+                    }
+                }
+                if (dayData.mokam) {
+                    for (let i = 0; i < dayData.mokam.length; i++) {
+                        dMokam += (Number(dayData.mokam[i].amount) || 0);
+                    }
+                }
+                if (dayData.tulaKroy) {
+                    for (let i = 0; i < dayData.tulaKroy.length; i++) {
+                        dTula += (Number(dayData.tulaKroy[i].amount) || 0);
+                    }
+                }
+                if (dayData.shimulTula) {
+                    for (let i = 0; i < dayData.shimulTula.length; i++) {
+                        dShimul += (Number(dayData.shimulTula[i].amount) || 0);
+                    }
+                }
+
+                if (isMonth) {
+                    mSales += dSales;
+                    mMunafa += dMunafa;
+                    mExpenses += dExpenses;
+                    mMonthlyExp += dMonthlyExp;
+                    mMokam += dMokam;
+                    mTula += dTula;
+                    mShimul += dShimul;
+                }
+
+                if (isYear) {
+                    ySales += dSales;
+                    yMunafa += dMunafa;
+                    yExpenses += dExpenses;
+                    yMonthlyExp += dMonthlyExp;
+                    yMokam += dMokam;
+                    yTula += dTula;
+                    yShimul += dShimul;
                 }
             });
 
