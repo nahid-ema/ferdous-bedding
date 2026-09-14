@@ -1,0 +1,25 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nahid-ema/ferdous-bedding.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nahid-ema/ferdous-bedding/issues"
+  },
+  "homepage": "https://github.com/nahid-ema/ferdous-bedding#readme",
+  "devDependencies": {
+    "jest": "^30.5.1",
+    "jsdom": "^22.1.0"
+  }
+}
