@@ -568,31 +568,49 @@
             let ySales = 0, yExpenses = 0, yMonthlyExp = 0, yMokam = 0, yTula = 0, yShimul = 0, yMunafa = 0;
 
             Object.keys(storeData).forEach(dateKey => {
-                if (dateKey.startsWith(targetMonth)) {
-                    const dayData = storeData[dateKey] || {};
-                    if (dayData.sales) dayData.sales.forEach(i => {
-                        mSales += (parseFloat(i.amount) || 0);
-                        mMunafa += (parseFloat(i.munafa) || 0);
-                    });
-                    if (dayData.expenses) dayData.expenses.forEach(i => mExpenses += (parseFloat(i.amount) || 0));
-                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => mMonthlyExp += (parseFloat(i.amount) || 0));
-                    if (dayData.mokam) dayData.mokam.forEach(i => mMokam += (parseFloat(i.amount) || 0));
-                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => mTula += (parseFloat(i.amount) || 0));
-                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => mShimul += (parseFloat(i.amount) || 0));
-                }
-                
-                if (dateKey.startsWith(targetYear)) {
-                    const dayData = storeData[dateKey] || {};
-                    if (dayData.sales) dayData.sales.forEach(i => {
-                        ySales += (parseFloat(i.amount) || 0);
-                        yMunafa += (parseFloat(i.munafa) || 0);
-                    });
-                    if (dayData.expenses) dayData.expenses.forEach(i => yExpenses += (parseFloat(i.amount) || 0));
-                    if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => yMonthlyExp += (parseFloat(i.amount) || 0));
-                    if (dayData.mokam) dayData.mokam.forEach(i => yMokam += (parseFloat(i.amount) || 0));
-                    if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => yTula += (parseFloat(i.amount) || 0));
-                    if (dayData.shimulTula) dayData.shimulTula.forEach(i => yShimul += (parseFloat(i.amount) || 0));
-                }
+                const isMonthMatch = dateKey.startsWith(targetMonth);
+                const isYearMatch = dateKey.startsWith(targetYear);
+
+                if (!isMonthMatch && !isYearMatch) return;
+
+                const dayData = storeData[dateKey] || {};
+
+                if (dayData.sales) dayData.sales.forEach(i => {
+                    const amount = parseFloat(i.amount) || 0;
+                    const munafa = parseFloat(i.munafa) || 0;
+                    if (isMonthMatch) { mSales += amount; mMunafa += munafa; }
+                    if (isYearMatch) { ySales += amount; yMunafa += munafa; }
+                });
+
+                if (dayData.expenses) dayData.expenses.forEach(i => {
+                    const amount = parseFloat(i.amount) || 0;
+                    if (isMonthMatch) mExpenses += amount;
+                    if (isYearMatch) yExpenses += amount;
+                });
+
+                if (dayData.monthlyExpenses) dayData.monthlyExpenses.forEach(i => {
+                    const amount = parseFloat(i.amount) || 0;
+                    if (isMonthMatch) mMonthlyExp += amount;
+                    if (isYearMatch) yMonthlyExp += amount;
+                });
+
+                if (dayData.mokam) dayData.mokam.forEach(i => {
+                    const amount = parseFloat(i.amount) || 0;
+                    if (isMonthMatch) mMokam += amount;
+                    if (isYearMatch) yMokam += amount;
+                });
+
+                if (dayData.tulaKroy) dayData.tulaKroy.forEach(i => {
+                    const amount = parseFloat(i.amount) || 0;
+                    if (isMonthMatch) mTula += amount;
+                    if (isYearMatch) yTula += amount;
+                });
+
+                if (dayData.shimulTula) dayData.shimulTula.forEach(i => {
+                    const amount = parseFloat(i.amount) || 0;
+                    if (isMonthMatch) mShimul += amount;
+                    if (isYearMatch) yShimul += amount;
+                });
             });
 
             document.getElementById('mTotalSales').innerText = mSales.toLocaleString('bn-BD');
